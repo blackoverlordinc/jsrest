@@ -5,6 +5,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.Collection;
 
 @Entity
@@ -14,12 +16,16 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotEmpty(message = "Имя не должно быть пустым")
+    @Size(min = 2, max = 100, message = "Имя должно быть от 2 до 100 символов длиной")
     @Column(name = "username")
     private String username;
 
     @Column(name = "password")
     private String password;
 
+    @NotEmpty(message = "Емейл не должен быть пустым")
+    @Size(min = 2, max = 100, message = "Емейл должен быть от 2 до 100 символов длиной")
     @Column(name = "email")
     private String email;
 
