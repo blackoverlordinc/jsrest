@@ -13,6 +13,8 @@
     <div style="color: red" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"> Name error</div>
   <input type="text" th:field="*{email}" id="email="/>
     <div style="color: red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"> Email error</div>
+    <input type="text" th:field="*{password}" id="password="/>
+    <div style="color: red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"> Password error</div>
   <br/>
   <input type="submit" value="Update!"/>
 </form>
