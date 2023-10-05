@@ -15,5 +15,8 @@
 <form th:method="DELETE" th:action="@{/{id}(id=${user.getId()})}">
     <input type="submit" value="Delete"/>
 </form>
+ <input align="right" type = "button" value = "logout"
+        onclick = "window.location.href = '/logout'"/>
+
 </body>
 </html>

@@ -3,6 +3,7 @@ package ru.kata.spring.boot_security.demo.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.entities.User;
@@ -28,23 +29,6 @@ public class MainController {
     @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;
-    }
-
-    @GetMapping("/authenticated")
-    public String pageForAuthenticatedUsers(Principal principal){
-        User user = userService.findByUsername(principal.getName());
-        return "secured part of web app: " + principal.getName() + " " + user.getEmail();
-    }
-
-
-    @GetMapping("/read_profile")
-    public String pageForReadProfile(){
-        return "read profile page";
-    }
-
-    @GetMapping("/only_for_admins")
-    public String pageOnlyForAdmins(){
-        return "admins_page";
     }
 
     @GetMapping("/registration")
@@ -103,5 +87,17 @@ public class MainController {
     public String delete(@PathVariable("id") Long id){
         userService.delete(id);
         return "redirect:/";
+    }
+
+    @GetMapping("/user")
+    public String onlyUser (Principal principal, ModelMap model) {
+        User user = userService.findByUsername(principal.getName());
+        model.addAttribute("user", user);
+        return "user";
+    }
+
+    @GetMapping("/admin")
+    public String admin (Principal principal, ModelMap model) {
+        return "admin";
     }
 }
