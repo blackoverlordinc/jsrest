@@ -1,9 +1,7 @@
 package ru.kata.spring.boot_security.demo.entities;
 
 import org.springframework.security.core.GrantedAuthority;
-
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "roles")

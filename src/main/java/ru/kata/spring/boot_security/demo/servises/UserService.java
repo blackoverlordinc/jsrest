@@ -12,15 +12,13 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.entities.Role;
 import ru.kata.spring.boot_security.demo.entities.User;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional(readOnly = true)
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
 
@@ -31,14 +29,6 @@ public class UserService implements UserDetailsService {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
-
-    @Transactional
-    public void register(User user){
-        String encodedPassword = passwordEncoder.encode(user.getPassword());
-        user.setPassword(encodedPassword);
-        userRepository.save(user);
-    }
-
 
     public User findByUsername(String username){
         return userRepository.findByUsername(username);
@@ -59,25 +49,21 @@ public class UserService implements UserDetailsService {
         return roles.stream().map(r -> new SimpleGrantedAuthority(r.getName())).collect(Collectors.toList());
     }
 
-    @PersistenceContext
-    private EntityManager entityManager;
-
-    public List<User> getAllUsers() {
-        return entityManager.createQuery("FROM User", User.class).getResultList();
+    public List<User> getAllUsers() { //redone
+        return userRepository.findAll();
     }
 
 
     @Transactional
-    public void addUser(User user) {
+    public void addUser(User user) { //redone
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
-        entityManager.persist(user);
+        userRepository.save(user);
     }
-    public User show(Long id){
-        TypedQuery<User> q = entityManager.createQuery("select u from User u where u.id = :id", User.class);
+    public User show(Long id){ // redone
+        Optional<User> foundUser = userRepository.findById(id);
 
-        q.setParameter("id", id);
-        return q.getResultList().stream().findAny().orElse(null);
+        return foundUser.orElse(null);
     }
 
     @Transactional
@@ -87,8 +73,8 @@ public class UserService implements UserDetailsService {
         userToBeUpdated.setEmail(updatedUser.getEmail());
     }
 
-    @Transactional
+    @Transactional //redone
     public void delete(Long id) {
-        entityManager.remove(entityManager.contains(show(id)) ? show(id) : entityManager.merge(show(id)));
+        userRepository.deleteById(id);
     }
 }
