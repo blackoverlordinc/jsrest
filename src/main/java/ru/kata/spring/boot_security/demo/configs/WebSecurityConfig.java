@@ -19,12 +19,8 @@ import ru.kata.spring.boot_security.demo.servises.UserService;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final SuccessUserHandler successUserHandler;
-    private  UserService userService;
+    private final UserService userService;
 
-    @Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
 
     @Autowired
     public WebSecurityConfig(SuccessUserHandler successUserHandler, UserService userService) {
@@ -37,7 +33,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/registration").permitAll()
                 .antMatchers("/authenticated/**").authenticated()
-                .antMatchers("/only_for_admins").hasRole("ADMIN")
+                .antMatchers("/only_for_admins", "/admin/**").hasRole("ADMIN")
                 .antMatchers("/read_profile").hasAuthority("READ_PROFILE")
                 .and()
                 .formLogin()
@@ -48,7 +44,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public static PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
 
