@@ -34,7 +34,7 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUsername(username);
     }
 
-    @Override
+
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = findByUsername(username);
@@ -66,11 +66,13 @@ public class UserService implements UserDetailsService {
         return foundUser.orElse(null);
     }
 
+
     @Transactional
-    public void update(Long id, User updatedUser){
-        User userToBeUpdated = show(id);
-        userToBeUpdated.setUsername(updatedUser.getUsername());
-        userToBeUpdated.setEmail(updatedUser.getEmail());
+    public void update(User user) {
+        if (!user.getPassword().equals(show(user.getId()).getPassword())) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+        userRepository.save(user);
     }
 
     @Transactional //redone
