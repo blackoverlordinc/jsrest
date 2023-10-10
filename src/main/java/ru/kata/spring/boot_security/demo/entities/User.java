@@ -97,4 +97,12 @@ public class User implements UserDetails {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public String roleToString(){
+        StringBuilder sb = new StringBuilder();
+        for(Role role: roles){
+            sb.append(role.getName()).append(" ");
+        }
+        return sb.toString();
+    }
 }
