@@ -6,6 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "users")
@@ -82,14 +83,6 @@ public class User implements UserDetails {
         return getRoles();
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -98,11 +91,28 @@ public class User implements UserDetails {
         this.email = email;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+
     public String roleToString(){
         StringBuilder sb = new StringBuilder();
         for(Role role: roles){
             sb.append(role.getName()).append(" ");
         }
         return sb.toString();
+    }
+
+    public String getRole() {
+        String rolesString = roles.stream()
+                .map(Role::getName)
+                .collect(Collectors.joining(", "));
+        return rolesString;
+
     }
 }

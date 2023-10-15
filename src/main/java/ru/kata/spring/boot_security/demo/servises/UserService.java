@@ -18,7 +18,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional(readOnly = true)
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
 
@@ -34,8 +33,7 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUsername(username);
     }
 
-
-    @Transactional
+    @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = findByUsername(username);
         if(user == null){
@@ -68,7 +66,7 @@ public class UserService implements UserDetailsService {
 
 
     @Transactional
-    public void update(Long id, User user) {
+    public void update(User user) {
         if (!user.getPassword().equals(show(user.getId()).getPassword())) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
@@ -78,5 +76,11 @@ public class UserService implements UserDetailsService {
     @Transactional //redone
     public void delete(Long id) {
         userRepository.deleteById(id);
+    }
+
+
+    public boolean isUsernameExists(String username) {
+        User existingUser = userRepository.findByUsername(username);
+        return existingUser != null;
     }
 }
