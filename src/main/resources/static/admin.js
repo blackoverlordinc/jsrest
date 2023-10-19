@@ -61,8 +61,8 @@ function editModal(id) {
             document.getElementById('editId').value = u.id;
             document.getElementById('editUserName').value = u.username;
             document.getElementById('editEmail').value = u.email;
-            document.getElementById('editPassword').value = "****";
-            document.getElementById('editRoles').selectedIndex = u.roles;
+            document.getElementById('editPassword').value = u.password;
+            document.getElementById('editRoles').selectedIndex = u.role;
         })
     });
 }
@@ -89,7 +89,7 @@ async function editUser() {
         roles: roles
     }
     await fetch(url, {
-        method: "PATCH",
+        method: "PUT",
         headers: {
             'Content-Type': 'application/json'
         },
@@ -111,10 +111,10 @@ function delModal(id) {
             res.json().then(u => {
 
                 document.getElementById('delId').value = u.id;
-                document.getElementById('delUserName').value = u.userName;
+                document.getElementById('delUserName').value = u.username;
                 document.getElementById('delEmail').value = u.email;
-                document.getElementById('delPassword').value = "****";
-                document.getElementById('delRoles').selectedIndex = u.roles;
+                document.getElementById('delPassword').value = u.password;
+                document.getElementById('delRoles').selectedIndex = u.role;
 
             })
         });
@@ -167,7 +167,7 @@ async function addUser() {
         roles: addRoles
     }
     await fetch(url, {
-        method: "PUT",
+        method: "POST",
         headers: {
             "Content-Type": "application/json"
         },

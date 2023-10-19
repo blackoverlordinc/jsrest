@@ -83,4 +83,8 @@ public class UserService implements UserDetailsService {
         User existingUser = userRepository.findByUsername(username);
         return existingUser != null;
     }
+
+    public User getUserById(Long id) {
+        return userRepository.findById(id).get();
+    }
 }

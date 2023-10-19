@@ -3,9 +3,7 @@ package ru.kata.spring.boot_security.demo.Controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.entities.User;
 import ru.kata.spring.boot_security.demo.servises.UserService;
 
@@ -23,7 +21,6 @@ public class AdminController {
         this.userService = userService;
     }
 
-
     @GetMapping({"/", ""})
     public String showAllUsers(Model model, @ModelAttribute("flashMessage") String flashAttribute, Principal principal) {
         List<User> users = userService.getAllUsers();
@@ -33,5 +30,7 @@ public class AdminController {
         model.addAttribute("newUser", new User());
         return "admin";
     }
+
+
 
 }
