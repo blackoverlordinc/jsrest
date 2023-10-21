@@ -175,6 +175,7 @@ async function addUser() {
     }).then(() => {
         clearAndHideAddForm();
         getAllUsers()
+        window.location.reload();
     })
 }
 function clearAndHideAddForm() {
